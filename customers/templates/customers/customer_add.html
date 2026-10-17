@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Add Customer | CloudStock{% endblock %}
+{% block page_title %}Add Customer{% endblock %}
+{% block content %}
+<div class="form-card">
+    <form method="POST" class="styled-form">
+        {% csrf_token %}
+
+        <div class="form-grid two-column">
+            <div class="field-group">
+                <label>Tenant</label>
+                <select name="tenant" required>
+                    {% for tenant in tenants %}
+                        <option value="{{ tenant.id }}">{{ tenant.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="field-group">
+                <label>Phone</label>
+                <input type="text" name="phone" required>
+            </div>
+
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" name="email">
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>Address</label>
+            <textarea name="address" rows="4"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="primary-btn">Save Customer</button>
+            <a href="{% url 'customer_list' %}" class="secondary-btn">Back</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

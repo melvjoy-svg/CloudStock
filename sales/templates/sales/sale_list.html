@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Sales | CloudStock{% endblock %}
+{% block page_title %}Sales Management{% endblock %}
+{% block header_actions %}
+<a href="{% url 'sale_add' %}" class="primary-btn">Add Sale</a>
+{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tenant</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Action</th><th>Invoice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>#{{ sale.id }}</td>
+                    <td>{{ sale.tenant.name }}</td>
+                    <td>{{ sale.customer.name }}</td>
+                    <td>{{ sale.sale_date }}</td>
+                    <td>₹{{ sale.total_amount }}</td>
+                    <td class="action-links">
+                        <a href="{% url 'sale_detail' sale.id %}">View</a>
+                    </td>
+                <td><a href="{% url 'invoice_view' sale.id %}" class="secondary-btn">Invoice</a></td></tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty-cell">No sales found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

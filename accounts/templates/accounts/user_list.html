@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Users | CloudStock{% endblock %}
+{% block page_title %}User Management{% endblock %}
+{% block header_actions %}
+<a href="{% url 'user_add' %}" class="primary-btn">Add User</a>
+{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Tenant</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.tenant }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-cell">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

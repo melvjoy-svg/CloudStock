@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Customers | CloudStock{% endblock %}
+{% block page_title %}Customer Management{% endblock %}
+{% block header_actions %}
+<a href="{% url 'customer_add' %}" class="primary-btn">Add Customer</a>
+{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tenant</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>#{{ customer.id }}</td>
+                    <td>{{ customer.tenant.name }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td class="action-links">
+                        <a href="{% url 'customer_edit' customer.id %}">Edit</a>
+                        <a href="{% url 'customer_delete' customer.id %}" class="danger-link">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty-cell">No customers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

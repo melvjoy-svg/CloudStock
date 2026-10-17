@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ dashboard_title }} | CloudStock{% endblock %}
+
+{% block page_title %}
+    {{ dashboard_title }}
+{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'logout' %}" class="secondary-btn">Logout</a>
+{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom: 25px;">
+    <p style="margin: 0; font-size: 16px;">
+        Welcome, <strong>{{ request.user.username }}</strong>
+    </p>
+
+    {% if request.user.tenant %}
+        <p style="margin: 5px 0 0; color: #64748b;">
+            {{ request.user.tenant.name }}
+        </p>
+    {% else %}
+        <p style="margin: 5px 0 0; color: #64748b;">
+            All Businesses
+        </p>
+    {% endif %}
+</div>
+
+
+<!-- ========================= -->
+<!-- DASHBOARD STATISTICS -->
+<!-- ========================= -->
+
+<div class="stats-grid">
+
+    <!-- SUPER ADMIN ONLY -->
+    {% if request.user.role == 'SUPER_ADMIN' %}
+    <div class="stat-card accent-blue">
+        <span class="stat-label">Tenants</span>
+        <strong>{{ tenant_count }}</strong>
+    </div>
+    {% endif %}
+
+
+    <!-- EVERYONE -->
+    <div class="stat-card accent-green">
+        <span class="stat-label">Products</span>
+        <strong>{{ product_count }}</strong>
+    </div>
+
+
+    <!-- SUPER ADMIN + BUSINESS OWNER -->
+    {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+    <div class="stat-card accent-purple">
+        <span class="stat-label">Suppliers</span>
+        <strong>{{ supplier_count }}</strong>
+    </div>
+    {% endif %}
+
+
+    <!-- EVERYONE -->
+    <div class="stat-card accent-orange">
+        <span class="stat-label">Customers</span>
+        <strong>{{ customer_count }}</strong>
+    </div>
+
+</div>
+
+
+<div class="stats-grid secondary-grid">
+
+    <!-- SUPER ADMIN + BUSINESS OWNER -->
+    {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+    <div class="stat-card accent-indigo">
+        <span class="stat-label">Purchases</span>
+        <strong>{{ purchase_count }}</strong>
+    </div>
+    {% endif %}
+
+
+    <!-- EVERYONE -->
+    <div class="stat-card accent-gold">
+        <span class="stat-label">Sales</span>
+        <strong>{{ sale_count }}</strong>
+    </div>
+
+
+    <!-- EVERYONE -->
+    <div class="stat-card accent-cyan">
+        <span class="stat-label">Total Stock</span>
+        <strong>{{ total_stock }}</strong>
+    </div>
+
+
+    <!-- EVERYONE -->
+    <div class="stat-card accent-red">
+        <span class="stat-label">Low Stock</span>
+        <strong>{{ low_stock_count }}</strong>
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- QUICK ACCESS + SUMMARY -->
+<!-- ========================= -->
+
+<div class="panel-grid">
+
+    <section class="panel-card">
+
+        <div class="panel-head">
+            <h3>Quick access</h3>
+        </div>
+
+        <div class="quick-links">
+
+            {% if request.user.role == 'SUPER_ADMIN' %}
+                <a href="{% url 'tenant_list' %}">Tenants</a>
+            {% endif %}
+
+            <!-- EVERYONE -->
+            <a href="{% url 'product_list' %}">Products</a>
+
+            <a href="{% url 'category_list' %}">Categories</a>
+
+
+            <!-- SUPER ADMIN + BUSINESS OWNER -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+
+                <a href="{% url 'supplier_list' %}">Suppliers</a>
+
+            {% endif %}
+
+
+            <!-- EVERYONE -->
+            <a href="{% url 'customer_list' %}">Customers</a>
+
+
+            <!-- SUPER ADMIN + BUSINESS OWNER -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+
+                <a href="{% url 'purchase_list' %}">Purchases</a>
+
+            {% endif %}
+
+
+            <!-- EVERYONE -->
+            <a href="{% url 'sale_list' %}">Sales</a>
+
+            <a href="{% url 'inventory_list' %}">Inventory</a>
+
+            <a href="{% url 'stock_transactions' %}">Stock Transactions</a>
+
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' or request.user.can_view_reports %}
+                <a href="{% url 'reports_dashboard' %}">Reports</a>
+            {% endif %}
+
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+                <a href="{% url 'staff_list' %}">Staff</a>
+            {% endif %}
+
+
+            <!-- SUPER ADMIN ONLY -->
+            {% if request.user.role == 'SUPER_ADMIN' %}
+
+                <a href="{% url 'user_list' %}">Users</a>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <section class="panel-card">
+
+        <div class="panel-head">
+            <h3>Operations summary</h3>
+        </div>
+
+        <ul class="summary-list">
+
+            <li>
+                <span>Live inventory</span>
+                <strong>{{ total_stock }} units</strong>
+            </li>
+
+
+            <!-- SUPER ADMIN + BUSINESS OWNER -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+            <li>
+                <span>Active suppliers</span>
+                <strong>{{ supplier_count }}</strong>
+            </li>
+            {% endif %}
+
+
+            <!-- EVERYONE -->
+            <li>
+                <span>Registered customers</span>
+                <strong>{{ customer_count }}</strong>
+            </li>
+
+
+            <!-- EVERYONE -->
+            <li>
+                <span>Sales records</span>
+                <strong>{{ sale_count }}</strong>
+            </li>
+
+        </ul>
+
+    </section>
+
+</div>
+
+{% endblock %}

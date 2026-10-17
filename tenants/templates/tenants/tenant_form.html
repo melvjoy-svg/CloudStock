@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{% if tenant %}Edit Tenant{% else %}Add Tenant{% endif %} | CloudStock{% endblock %}
+{% block page_title %}{% if tenant %}Edit Tenant{% else %}Add Tenant{% endif %}{% endblock %}
+{% block content %}
+<div class="form-card">
+    <form method="POST" class="styled-form">{% csrf_token %}
+        <div class="form-grid two-column">
+            <div class="field-group"><label>Business Name</label><input type="text" name="name" value="{{ tenant.name|default:'' }}" required></div>
+            <div class="field-group"><label>Email</label><input type="email" name="email" value="{{ tenant.email|default:'' }}" required></div>
+            <div class="field-group"><label>Phone</label><input type="text" name="phone" value="{{ tenant.phone|default:'' }}"></div>
+            {% if tenant %}
+            <div class="field-group">
+                <label>Status</label>
+                <label><input type="checkbox" name="is_active" {% if tenant.is_active %}checked{% endif %}> Active</label>
+            </div>
+            {% endif %}
+        </div>
+        <div class="field-group"><label>Address</label><textarea name="address" rows="4">{{ tenant.address|default:'' }}</textarea></div>
+        <div class="form-actions"><button type="submit" class="primary-btn">{% if tenant %}Update Tenant{% else %}Save Tenant{% endif %}</button><a href="{% url 'tenant_list' %}" class="secondary-btn">Back</a></div>
+    </form>
+</div>
+{% endblock %}

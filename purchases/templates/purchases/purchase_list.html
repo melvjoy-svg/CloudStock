@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Purchases | CloudStock{% endblock %}
+{% block page_title %}Purchase Management{% endblock %}
+{% block header_actions %}
+<a href="{% url 'purchase_add' %}" class="primary-btn">Add Purchase</a>
+{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Supplier</th>
+                    <th>Purchase Date</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchases %}
+                <tr>
+                    <td>#{{ purchase.id }}</td>
+                    <td>{{ purchase.supplier.name }}</td>
+                    <td>{{ purchase.purchase_date }}</td>
+                    <td>₹{{ purchase.total_amount }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-cell">No purchases available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

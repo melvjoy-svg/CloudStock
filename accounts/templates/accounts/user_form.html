@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Add User | CloudStock{% endblock %}
+{% block page_title %}Add User{% endblock %}
+{% block content %}
+<div class="form-card">{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    <form method="POST" class="styled-form">
+        {% csrf_token %}
+
+        <div class="form-grid two-column">
+            <div class="field-group">
+                <label>Username</label>
+                <input type="text" name="username" required>
+            </div>
+
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+
+            <div class="field-group">
+                <label>Role</label>
+                <select name="role" required>
+                    <option value="SUPER_ADMIN">Super Admin</option>
+                    <option value="BUSINESS_OWNER">Business Owner</option>
+                    <option value="STAFF" selected>Staff</option>
+                </select>
+            </div>
+
+            <div class="field-group full-width">
+                <label>Tenant</label>
+                <select name="tenant">
+                    <option value="">-- No Tenant --</option>
+                    {% for tenant in tenants %}
+                        <option value="{{ tenant.id }}">{{ tenant.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="primary-btn">Save User</button>
+            <a href="{% url 'user_list' %}" class="secondary-btn">Back to Users</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

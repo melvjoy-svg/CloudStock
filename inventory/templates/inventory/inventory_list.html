@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Inventory | CloudStock{% endblock %}
+{% block page_title %}Inventory Management{% endblock %}
+{% block header_actions %}
+<a href="{% url 'stock_transactions' %}" class="secondary-btn">View Transactions</a>
+{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tenant</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inventory in inventories %}
+                <tr>
+                    <td>#{{ inventory.id }}</td>
+                    <td>{{ inventory.tenant.name }}</td>
+                    <td>{{ inventory.product.name }}</td>
+                    <td>{{ inventory.quantity }}</td>
+                    <td>
+                        {% if inventory.quantity <= inventory.product.reorder_level %}
+                            <span class="status-badge danger">Low Stock</span>
+                        {% else %}
+                            <span class="status-badge success">Available</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ inventory.last_updated }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-cell">No inventory records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

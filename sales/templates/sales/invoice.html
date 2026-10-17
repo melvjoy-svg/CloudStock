@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Invoice {{ invoice_number }} | CloudStock{% endblock %}
+{% block page_title %}Invoice {{ invoice_number }}{% endblock %}
+{% block content %}
+<div class="invoice-card" id="invoice">
+<div class="invoice-head"><div><h2>CloudStock</h2><p>{{ sale.tenant.name }}</p><p>{{ sale.tenant.email }}{% if sale.tenant.phone %} · {{ sale.tenant.phone }}{% endif %}</p></div><div class="invoice-meta"><strong>{{ invoice_number }}</strong><span>Date: {{ sale.sale_date }}</span></div></div>
+<hr>
+<div class="invoice-customer"><strong>Bill To</strong><span>{% if sale.customer %}{{ sale.customer.name }}</span><span>{{ sale.customer.phone }}</span>{% else %}Walk-in Customer</span>{% endif %}</div>
+<table><thead><tr><th>#</th><th>Product</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody>{% for item in sale.items.all %}<tr><td>{{ forloop.counter }}</td><td>{{ item.product.name }}</td><td>{{ item.quantity }}</td><td>₹{{ item.unit_price }}</td><td>₹{{ item.subtotal }}</td></tr>{% endfor %}</tbody></table>
+<div class="invoice-total"><span>Total Amount</span><strong>₹{{ sale.total_amount }}</strong></div><p class="invoice-note">Thank you for your business.</p></div>
+<div class="form-actions no-print"><button class="primary-btn" onclick="window.print()">Print Invoice</button><a href="{% url 'sale_detail' sale.id %}" class="secondary-btn">Back</a></div>
+<style>@media print{.sidebar,.topbar,.no-print{display:none!important}.main-content{margin:0!important}.page-content{padding:0!important}.invoice-card{box-shadow:none!important;border:0!important}}</style>
+{% endblock %}

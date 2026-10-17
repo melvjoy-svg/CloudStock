@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Add Purchase | CloudStock{% endblock %}
+{% block page_title %}Create Purchase{% endblock %}
+{% block content %}
+<div class="form-card">{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+<form method="POST" class="styled-form">{% csrf_token %}
+<div class="form-grid two-column">
+<div class="field-group">{% if request.user.role == 'SUPER_ADMIN' %}<label>Tenant</label><select name="tenant" required>{% for tenant in tenants %}<option value="{{ tenant.id }}">{{ tenant.name }}</option>{% endfor %}</select>{% else %}<input type="hidden" name="tenant" value="{{ request.user.tenant.id }}">{% endif %}</div>
+<div class="field-group"><label>Supplier</label><select name="supplier" required><option value="">Select Supplier</option>{% for supplier in suppliers %}<option value="{{ supplier.id }}">{{ supplier.name }}</option>{% endfor %}</select></div>
+<div class="field-group"><label>Purchase Date</label><input type="date" name="purchase_date" value="{{ today|date:'Y-m-d' }}" required></div>
+</div>
+<h3>Purchase Items</h3><div id="purchase-items"><div class="item-row form-grid three-column">
+<div class="field-group"><label>Product</label><select name="product_ids" required>{% for product in products %}<option value="{{ product.id }}">{{ product.name }} ({{ product.sku }})</option>{% endfor %}</select></div>
+<div class="field-group"><label>Quantity</label><input type="number" name="quantities" min="1" required></div>
+<div class="field-group"><label>Unit Cost</label><input type="number" name="unit_costs" step="0.01" min="0" required></div></div></div>
+<div class="form-actions"><button type="button" class="secondary-btn" onclick="addPurchaseRow()">+ Add Another Item</button></div>
+<div class="form-actions"><button type="submit" class="primary-btn">Save Purchase</button><a href="{% url 'purchase_list' %}" class="secondary-btn">Cancel</a></div>
+</form></div>
+<script>function addPurchaseRow(){const box=document.getElementById('purchase-items');const row=box.querySelector('.item-row').cloneNode(true);row.querySelectorAll('input').forEach(i=>i.value='');box.appendChild(row);}</script>
+{% endblock %}

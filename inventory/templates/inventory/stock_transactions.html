@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Stock Transactions | CloudStock{% endblock %}
+{% block page_title %}Stock Transactions{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tenant</th>
+                    <th>Product</th>
+                    <th>Transaction Type</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>#{{ transaction.id }}</td>
+                    <td>{{ transaction.tenant.name }}</td>
+                    <td>{{ transaction.product.name }}</td>
+                    <td>{{ transaction.get_transaction_type_display }}</td>
+                    <td>{{ transaction.quantity }}</td>
+                    <td>{{ transaction.transaction_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-cell">No stock transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="back-link-wrap">
+        <a href="{% url 'inventory_list' %}" class="secondary-btn">Back to Inventory</a>
+    </div>
+</div>
+{% endblock %}

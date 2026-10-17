@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Tenants | CloudStock{% endblock %}
+{% block page_title %}Tenant Management{% endblock %}
+{% block header_actions %}
+<a href="{% url 'tenant_add' %}" class="primary-btn">Add Tenant</a>
+{% endblock %}
+{% block content %}
+<div class="table-card">
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Business Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tenant in tenants %}
+                <tr>
+                    <td>#{{ tenant.id }}</td>
+                    <td>{{ tenant.name }}</td>
+                    <td>{{ tenant.email }}</td>
+                    <td>{{ tenant.phone }}</td>
+                    <td>
+                        {% if tenant.is_active %}
+                            <span class="status-badge success">Active</span>
+                        {% else %}
+                            <span class="status-badge danger">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="action-links">
+                        <a href="{% url 'tenant_edit' tenant.id %}">Edit</a>
+                        <a href="{% url 'tenant_delete' tenant.id %}" class="danger-link">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-cell">No tenants found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

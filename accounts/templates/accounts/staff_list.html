@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}Staff | CloudStock{% endblock %}
+{% block page_title %}Staff Management{% endblock %}
+{% block header_actions %}<a href="{% url 'staff_add' %}" class="primary-btn">Add Staff</a>{% endblock %}
+{% block content %}<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Username</th><th>Email</th><th>Tenant</th><th>Products</th><th>Purchases</th><th>Sales</th><th>Customers</th><th>Reports</th><th></th></tr></thead><tbody>{% for user in users %}<tr><td>{{ user.username }}</td><td>{{ user.email }}</td><td>{{ user.tenant.name }}</td><td>{{ user.can_manage_products|yesno:'Yes,No' }}</td><td>{{ user.can_manage_purchases|yesno:'Yes,No' }}</td><td>{{ user.can_manage_sales|yesno:'Yes,No' }}</td><td>{{ user.can_manage_customers|yesno:'Yes,No' }}</td><td>{{ user.can_view_reports|yesno:'Yes,No' }}</td><td><a href="{% url 'staff_edit' user.id %}" class="secondary-btn">Edit</a></td></tr>{% empty %}<tr><td colspan="9">No staff accounts.</td></tr>{% endfor %}</tbody></table></div></div>{% endblock %}

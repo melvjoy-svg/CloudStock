@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Sale #{{ sale.id }} | CloudStock{% endblock %}
+{% block page_title %}Sale #{{ sale.id }}{% endblock %}
+{% block header_actions %}<a href="{% url 'invoice_view' sale.id %}" class="primary-btn">View / Print Invoice</a>{% endblock %}
+{% block content %}<div class="panel-card detail-panel">
+<div class="info-row"><span>Tenant</span><strong>{{ sale.tenant.name }}</strong></div><div class="info-row"><span>Customer</span><strong>{% if sale.customer %}{{ sale.customer.name }}{% else %}Walk-in Customer{% endif %}</strong></div><div class="info-row"><span>Date</span><strong>{{ sale.sale_date }}</strong></div><div class="info-row"><span>Created By</span><strong>{{ sale.created_by.username }}</strong></div></div>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Product</th><th>Quantity</th><th>Unit Price</th><th>Subtotal</th></tr></thead><tbody>{% for item in sale.items.all %}<tr><td>{{ item.product.name }}</td><td>{{ item.quantity }}</td><td>₹{{ item.unit_price }}</td><td>₹{{ item.subtotal }}</td></tr>{% endfor %}</tbody></table></div><div class="total-box"><span>Total</span><strong>₹{{ sale.total_amount }}</strong></div><div class="back-link-wrap"><a href="{% url 'sale_list' %}" class="secondary-btn">Back to Sales</a></div></div>{% endblock %}

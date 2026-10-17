@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Login | CloudStock{% endblock %}
+{% block body_class %}auth-body{% endblock %}
+{% block app_layout %}
+<div class="auth-shell">
+    <div class="auth-card">
+        <div class="auth-brand">
+            <div class="brand-logo">C</div>
+            <div>
+                <p class="brand-name">CloudStock</p>
+                <small>Inventory Management</small>
+            </div>
+        </div>
+
+        {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+
+        <h2>Welcome back</h2>
+        <p class="subtitle">Sign in to manage your stock, sales, and customers.</p>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            <div class="field-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" placeholder="Enter username" required>
+            </div>
+
+            <div class="field-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="primary-btn">Login</button>
+        </form>
+
+        <p class="subtitle" style="margin-top: 18px; text-align: center;">
+            New business? <a href="{% url 'owner_register' %}">Create an owner account</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

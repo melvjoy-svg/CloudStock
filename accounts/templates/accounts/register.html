@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Register | CloudStock{% endblock %}
+{% block body_class %}auth-body{% endblock %}
+{% block app_layout %}
+<div class="auth-shell">
+    <div class="auth-card" style="max-width: 620px;">
+        <div class="auth-brand">
+            <div class="brand-logo">C</div>
+            <div>
+                <p class="brand-name">CloudStock</p>
+                <small>Business Registration</small>
+            </div>
+        </div>
+
+        {% if errors %}
+            <div class="alert alert-error">
+                {% for error in errors %}<div>{{ error }}</div>{% endfor %}
+            </div>
+        {% endif %}
+
+        <h2>Create your business account</h2>
+        <p class="subtitle">Register a business and its first Business Owner account.</p>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            <div class="field-group">
+                <label>Business Name *</label>
+                <input type="text" name="tenant_name" value="{{ form_data.tenant_name|default:'' }}" required>
+            </div>
+            <div class="field-group">
+                <label>Business Email *</label>
+                <input type="email" name="tenant_email" value="{{ form_data.tenant_email|default:'' }}" required>
+            </div>
+            <div class="field-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="{{ form_data.phone|default:'' }}">
+            </div>
+            <div class="field-group">
+                <label>Address</label>
+                <textarea name="address" rows="2">{{ form_data.address|default:'' }}</textarea>
+            </div>
+            <hr>
+            <div class="field-group">
+                <label>Owner Username *</label>
+                <input type="text" name="username" value="{{ form_data.username|default:'' }}" required>
+            </div>
+            <div class="field-group">
+                <label>Owner Email *</label>
+                <input type="email" name="email" value="{{ form_data.email|default:'' }}" required>
+            </div>
+            <div class="field-group">
+                <label>Password *</label>
+                <input type="password" name="password" required>
+            </div>
+            <div class="field-group">
+                <label>Confirm Password *</label>
+                <input type="password" name="confirm_password" required>
+            </div>
+
+            <button type="submit" class="primary-btn">Create Business Account</button>
+        </form>
+
+        <p class="subtitle" style="margin-top: 18px; text-align: center;">
+            Already registered? <a href="{% url 'login' %}">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

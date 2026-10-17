@@ -1,0 +1,244 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}CloudStock{% endblock %}
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+
+<body class="{% block body_class %}app-body{% endblock %}">
+
+{% block app_layout %}
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <!-- BRAND -->
+        <div class="brand-wrap">
+
+            <div class="brand-logo">
+                C
+            </div>
+
+            <div>
+                <p class="brand-name">
+                    CloudStock
+                </p>
+
+                <small>
+                    Inventory Suite
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+        <nav class="nav-menu" aria-label="Main navigation">
+
+
+            <!-- DASHBOARD - Everyone -->
+            <a
+                href="{% url 'dashboard' %}"
+                class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}"
+            >
+                <span>Dashboard</span>
+            </a>
+
+
+            {% if request.user.role == 'SUPER_ADMIN' %}
+            <a href="{% url 'tenant_list' %}" class="nav-item {% if '/tenants/' in request.path %}active{% endif %}">
+                <span>Tenants</span>
+            </a>
+            {% endif %}
+
+            <!-- PRODUCTS - Everyone -->
+            <a
+                href="{% url 'product_list' %}"
+                class="nav-item {% if '/products/' in request.path and 'categories' not in request.path %}active{% endif %}"
+            >
+                <span>Products</span>
+            </a>
+
+
+            <!-- CATEGORIES - Everyone -->
+            <a
+                href="{% url 'category_list' %}"
+                class="nav-item {% if '/products/categories/' in request.path %}active{% endif %}"
+            >
+                <span>Categories</span>
+            </a>
+
+
+            <!-- SUPPLIERS - SUPER_ADMIN + BUSINESS_OWNER -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+
+            <a
+                href="{% url 'supplier_list' %}"
+                class="nav-item {% if '/suppliers/' in request.path %}active{% endif %}"
+            >
+                <span>Suppliers</span>
+            </a>
+
+            {% endif %}
+
+
+            <!-- CUSTOMERS - Everyone -->
+            <a
+                href="{% url 'customer_list' %}"
+                class="nav-item {% if '/customers/' in request.path %}active{% endif %}"
+            >
+                <span>Customers</span>
+            </a>
+
+
+            <!-- PURCHASES - SUPER_ADMIN + BUSINESS_OWNER -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+
+            <a
+                href="{% url 'purchase_list' %}"
+                class="nav-item {% if '/purchases/' in request.path %}active{% endif %}"
+            >
+                <span>Purchases</span>
+            </a>
+
+            {% endif %}
+
+
+            <!-- SALES - Everyone -->
+            <a
+                href="{% url 'sale_list' %}"
+                class="nav-item {% if '/sales/' in request.path %}active{% endif %}"
+            >
+                <span>Sales</span>
+            </a>
+
+
+            <!-- INVENTORY - Everyone -->
+            <a
+                href="{% url 'inventory_list' %}"
+                class="nav-item {% if '/inventory/' in request.path and 'transactions' not in request.path %}active{% endif %}"
+            >
+                <span>Inventory</span>
+            </a>
+
+
+            <!-- TRANSACTIONS - Everyone -->
+            <a
+                href="{% url 'stock_transactions' %}"
+                class="nav-item {% if 'transactions' in request.path %}active{% endif %}"
+            >
+                <span>Transactions</span>
+            </a>
+
+
+            <!-- REPORTS -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' or request.user.can_view_reports %}
+            <a href="{% url 'reports_dashboard' %}" class="nav-item {% if '/reports/' in request.path %}active{% endif %}"><span>Reports</span></a>
+            {% endif %}
+
+            <!-- STAFF MANAGEMENT -->
+            {% if request.user.role == 'SUPER_ADMIN' or request.user.role == 'BUSINESS_OWNER' %}
+            <a href="{% url 'staff_list' %}" class="nav-item {% if '/accounts/staff/' in request.path %}active{% endif %}"><span>Staff</span></a>
+            {% endif %}
+
+            <!-- USERS - SUPER_ADMIN ONLY -->
+            {% if request.user.role == 'SUPER_ADMIN' %}
+
+            <a
+                href="{% url 'user_list' %}"
+                class="nav-item {% if '/accounts/' in request.path %}active{% endif %}"
+            >
+                <span>Users</span>
+            </a>
+
+            {% endif %}
+
+
+        </nav>
+
+
+        <!-- LOGOUT -->
+        <div class="sidebar-footer">
+
+            <a
+                href="{% url 'logout' %}"
+                class="logout-link"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    Operations overview
+                </p>
+
+                <h1>
+                    {% block page_title %}
+                        Dashboard
+                    {% endblock %}
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                {% block header_actions %}
+                {% endblock %}
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+</body>
+
+</html>
