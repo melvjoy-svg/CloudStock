@@ -15,6 +15,8 @@ from sales.models import Sale
 from inventory.models import Inventory, StockTransaction
 from .decorators import role_required
 
+def home_view(request):
+    return render(request, "index.html")
 
 def login_view(request):
     if request.user.is_authenticated:

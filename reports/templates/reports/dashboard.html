@@ -1,10 +1,353 @@
 {% extends 'base.html' %}
+
 {% block title %}Reports | CloudStock{% endblock %}
 {% block page_title %}Reports & Analytics{% endblock %}
+
 {% block content %}
-<div class="form-card"><form method="get" class="form-grid three-column"><div class="field-group"><label>From</label><input type="date" name="start" value="{{ start|date:'Y-m-d' }}"></div><div class="field-group"><label>To</label><input type="date" name="end" value="{{ end|date:'Y-m-d' }}"></div><div class="field-group" style="align-self:end"><button class="primary-btn" type="submit">Apply Filter</button></div></form></div>
-<div class="stats-grid"><div class="stat-card accent-green"><span class="stat-label">Sales</span><strong>₹{{ sales_total }}</strong><small>{{ sales_count }} records</small></div><div class="stat-card accent-indigo"><span class="stat-label">Purchases</span><strong>₹{{ purchases_total }}</strong><small>{{ purchases_count }} records</small></div><div class="stat-card accent-blue"><span class="stat-label">Estimated Net</span><strong>₹{{ profit_estimate }}</strong><small>Sales − Purchases</small></div></div>
-<div class="panel-grid"><section class="panel-card"><div class="panel-head"><h3>Top Products by Revenue</h3></div><div class="table-scroll"><table><thead><tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead><tbody>{% for row in top_products %}<tr><td>{{ row.product__name }}</td><td>{{ row.quantity }}</td><td>₹{{ row.revenue }}</td></tr>{% empty %}<tr><td colspan="3">No sales in selected period.</td></tr>{% endfor %}</tbody></table></div></section>
-<section class="panel-card"><div class="panel-head"><h3>Low Stock</h3></div><div class="table-scroll"><table><thead><tr><th>Product</th><th>Current</th><th>Reorder Level</th></tr></thead><tbody>{% for item in low_stock %}<tr><td>{{ item.product.name }}</td><td>{{ item.quantity }}</td><td>{{ item.product.reorder_level }}</td></tr>{% empty %}<tr><td colspan="3">No low-stock items.</td></tr>{% endfor %}</tbody></table></div></section></div>
-<div class="table-card"><div class="panel-head"><h3>Recent Sales</h3></div><div class="table-scroll"><table><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Total</th></tr></thead><tbody>{% for sale in sales %}<tr><td><a href="{% url 'invoice_view' sale.id %}">INV-{{ sale.id|stringformat:'06d' }}</a></td><td>{{ sale.sale_date }}</td><td>{% if sale.customer %}{{ sale.customer.name }}{% else %}Walk-in{% endif %}</td><td>₹{{ sale.total_amount }}</td></tr>{% empty %}<tr><td colspan="4">No sales found.</td></tr>{% endfor %}</tbody></table></div></div>
+
+<!-- =========================================================
+     DATE FILTER
+     ========================================================= -->
+
+<div class="form-card reports-filter-card">
+
+    <form method="get" class="reports-filter-form">
+
+        <div class="field-group">
+            <label for="start">From</label>
+
+            <input
+                id="start"
+                type="date"
+                name="start"
+                value="{{ start|date:'Y-m-d' }}"
+            >
+        </div>
+
+
+        <div class="field-group">
+            <label for="end">To</label>
+
+            <input
+                id="end"
+                type="date"
+                name="end"
+                value="{{ end|date:'Y-m-d' }}"
+            >
+        </div>
+
+
+        <div class="reports-filter-button">
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Apply Filter
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     REPORT SUMMARY
+     ========================================================= -->
+
+<div class="stats-grid reports-stats-grid">
+
+    <!-- SALES -->
+
+    <div class="stat-card accent-blue">
+
+        <span class="stat-label">
+            Sales
+        </span>
+
+        <strong>
+            ₹{{ sales_total }}
+        </strong>
+
+        <small>
+            {{ sales_count }} records
+        </small>
+
+    </div>
+
+
+    <!-- PURCHASES -->
+
+    <div class="stat-card accent-green">
+
+        <span class="stat-label">
+            Purchases
+        </span>
+
+        <strong>
+            ₹{{ purchases_total }}
+        </strong>
+
+        <small>
+            {{ purchases_count }} records
+        </small>
+
+    </div>
+
+
+    <!-- ESTIMATED NET -->
+
+    <div class="stat-card accent-purple">
+
+        <span class="stat-label">
+            Estimated Net
+        </span>
+
+        <strong>
+            ₹{{ profit_estimate }}
+        </strong>
+
+        <small>
+            Sales − Purchases
+        </small>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOP PRODUCTS + LOW STOCK
+     ========================================================= -->
+
+<div class="panel-grid">
+
+
+    <!-- TOP PRODUCTS -->
+
+    <section class="panel-card">
+
+        <div class="panel-head">
+            <h3>
+                Top Products by Revenue
+            </h3>
+        </div>
+
+
+        <div class="table-scroll">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty Sold</th>
+                        <th>Revenue</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for row in top_products %}
+
+                    <tr>
+
+                        <td>
+                            {{ row.product__name }}
+                        </td>
+
+                        <td>
+                            {{ row.quantity }}
+                        </td>
+
+                        <td>
+                            ₹{{ row.revenue }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="3">
+                            No sales in selected period.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- LOW STOCK -->
+
+    <section class="panel-card">
+
+        <div class="panel-head">
+
+            <h3>
+                Low Stock
+            </h3>
+
+        </div>
+
+
+        <div class="table-scroll">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Current</th>
+                        <th>Reorder Level</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for item in low_stock %}
+
+                    <tr>
+
+                        <td>
+                            {{ item.product.name }}
+                        </td>
+
+                        <td>
+                            {{ item.quantity }}
+                        </td>
+
+                        <td>
+                            {{ item.product.reorder_level }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="3">
+                            No low-stock items.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     RECENT SALES
+     ========================================================= -->
+
+<div class="table-card">
+
+    <div class="panel-head">
+
+        <h3>
+            Recent Sales
+        </h3>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Invoice</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for sale in sales %}
+
+                <tr>
+
+                    <td>
+
+                        <a href="{% url 'invoice_view' sale.id %}">
+                            INV-{{ sale.id|stringformat:'06d' }}
+                        </a>
+
+                    </td>
+
+
+                    <td>
+                        {{ sale.sale_date }}
+                    </td>
+
+
+                    <td>
+
+                        {% if sale.customer %}
+                            {{ sale.customer.name }}
+                        {% else %}
+                            Walk-in
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        ₹{{ sale.total_amount }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="4">
+                        No sales found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
 {% endblock %}
