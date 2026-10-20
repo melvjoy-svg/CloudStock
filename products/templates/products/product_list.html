@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Image</th>
                     <th>Tenant</th>
                     <th>Product Name</th>
                     <th>Category</th>
@@ -24,6 +25,7 @@
                 {% for product in products %}
                 <tr>
                     <td>#{{ product.id }}</td>
+                    <td>{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;">{% else %}-{% endif %}</td>
                     <td>{{ product.tenant.name }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ product.category.name|default:'-' }}</td>

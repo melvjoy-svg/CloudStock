@@ -38,6 +38,7 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField(default=0)
     reorder_level = models.PositiveIntegerField(default=0)
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
 
     class Meta:
         constraints = [

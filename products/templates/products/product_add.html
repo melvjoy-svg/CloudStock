@@ -4,7 +4,7 @@
 {% block content %}
 <div class="form-card">
     {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-    <form method="POST" class="styled-form">{% csrf_token %}
+    <form method="POST" enctype="multipart/form-data" class="styled-form">{% csrf_token %}
         <div class="form-grid two-column">
             {% if request.user.role == 'SUPER_ADMIN' %}
             <div class="field-group">
@@ -30,6 +30,7 @@
             <div class="field-group"><label>Reorder Level</label><input type="number" min="0" name="reorder_level" value="0" required></div>
         </div>
         <div class="field-group"><label>Description</label><textarea name="description" rows="4"></textarea></div>
+        <div class="field-group"><label>Product Image</label><input type="file" name="image" accept="image/*"></div>
         <div class="form-actions"><button type="submit" class="primary-btn">Add Product</button><a href="{% url 'product_list' %}" class="secondary-btn">Cancel</a></div>
     </form>
 </div>
