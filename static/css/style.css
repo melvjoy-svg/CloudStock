@@ -2043,3 +2043,65 @@ textarea:focus {
     }
 
 }
+/* =========================================================
+   CLOUDSTOCK DASHBOARD - FINAL RESPONSIVE 4-COLUMN LAYOUT
+   ========================================================= */
+
+.stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+    width: 100% !important;
+}
+
+.secondary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+    width: 100% !important;
+}
+
+.stat-card {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.panel-grid {
+    display: grid !important;
+    grid-template-columns: 1.3fr 1fr !important;
+    gap: 22px !important;
+    width: 100% !important;
+}
+
+/* Laptop / tablet */
+@media (max-width: 1200px) {
+    .stats-grid,
+    .secondary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .stats-grid,
+    .secondary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .panel-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .stats-grid,
+    .secondary-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .main-content {
+        padding: 20px 16px 30px !important;
+    }
+}
+
